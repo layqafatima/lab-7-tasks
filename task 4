@@ -1,0 +1,143 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Person {
+protected:
+    string name;
+    int id;
+    string address;
+    string phoneNumber;
+    string email;
+
+public:
+    Person(string n, int pid, string a, string p, string e) : name(n), id(pid), address(a), phoneNumber(p), email(e) {}
+
+    string getName() const { return name; }
+
+    virtual void displayInfo() {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Address: " << address << endl;
+        cout << "Phone: " << phoneNumber << endl;
+        cout << "Email: " << email << endl;
+    }
+
+    void updateInfo(string n, int pid, string addr, string phone, string mail) {
+        name = n;
+        id = pid;
+        address = addr;
+        phoneNumber = phone;
+        email = mail;
+    }
+};
+
+class Student : public Person {
+private:
+    int coursesEnrolled;
+    double GPA;
+    int enrollmentYear;
+
+public:
+    double getGPA() const {
+        return GPA;
+    }
+
+public:
+    Student(string n, int i, string a, string p, string e, int c, double g, int y) : Person(n, i, a, p, e), coursesEnrolled(c), GPA(g), enrollmentYear(y) {}
+
+    void displayInfo() override {
+        Person::displayInfo();
+        cout << "Courses Enrolled: " << coursesEnrolled << endl;
+        cout << "GPA: " << GPA << endl;
+        cout << "Enrollment Year: " << enrollmentYear << endl;
+    }
+};
+
+class Professor : public Person {
+private:
+    string department;
+    int coursesTaught;
+    double salary;
+
+public:
+    Professor(string n, int i, string a, string p, string e, string d, int c, double s) : Person(n, i, a, p, e), department(d), coursesTaught(c), salary(s) {}
+
+    void displayInfo() override {
+        Person::displayInfo();
+        cout << "Department: " << department << endl;
+        cout << "Courses Taught: " << coursesTaught << endl;
+        cout << "Salary: " << salary << endl;
+    }
+};
+
+class Staff : public Person {
+private:
+    string department;
+    string position;
+    double salary;
+
+public:
+    Staff(string n, int i, string a, string p, string e, string d, string pos, double s) : Person(n, i, a, p, e), department(d), position(pos), salary(s) {}
+
+    void displayInfo() override {
+        Person::displayInfo();
+        cout << "Department: " << department << endl;
+        cout << "Position: " << position << endl;
+        cout << "Salary: " << salary << endl;
+    }
+};
+
+class Course {
+private:
+    int courseId;
+    string courseName;
+    int credits;
+    string instructor;
+    string schedule;
+
+public:
+    Course(int id, string name, int cr, string instr, string sch) : courseId(id), courseName(name), credits(cr), instructor(instr), schedule(sch) {}
+
+    void registerStudent(Student& s) {
+        cout << s.getName() << " has registered for the course: " << courseName << endl;
+    }
+
+    void calculateGrades(double gpa) {
+        if (gpa >= 3.5)
+            cout << "Grade: A" << endl;
+        else if (gpa >= 2.5)
+            cout << "Grade: B" << endl;
+        else if (gpa >= 1.5)
+            cout << "Grade: C" << endl;
+        else
+            cout << "Grade: D" << endl;
+    }
+
+    void displayCourseInfo() {
+        cout << "Course ID: " << courseId << endl;
+        cout << "Course Name: " << courseName << endl;
+        cout << "Credits: " << credits << endl;
+        cout << "Instructor: " << instructor << endl;
+        cout << "Schedule: " << schedule << endl;
+    }
+};
+
+int main() {
+    Student s("Blah", 101, "123 Street", "1234567890", "blah@example.com", 5, 3.8, 2022);
+    Professor p("Blooh", 202, "456 Avenue", "9876543210", "blooh@example.com", "CS", 3, 90000);
+    Staff st("Bleeh", 303, "789 Boulevard", "5551234567", "bleeh@example.com", "Admin", "Manager", 50000);
+
+    s.displayInfo();
+    cout << endl;
+    p.displayInfo();
+    cout << endl;
+    st.displayInfo();
+
+        Course c(101, "Data Structures", 3, "Dr. Bob", "MWF 9-10 AM");
+    c.displayCourseInfo();
+    c.registerStudent(s);
+    c.calculateGrades(s.getGPA());
+
+    return 0;
+}
