@@ -1,0 +1,118 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Account {
+protected:
+    string accountNumber;
+    string accountHolderName;
+    double balance;
+public:
+    Account(string accNum, string holderName, double bal) {
+        accountNumber = accNum;
+        accountHolderName = holderName;
+        balance = bal;
+    }
+    virtual void deposit(double amount) {
+        balance += amount;
+    }
+    virtual bool withdraw(double amount) {
+        if (amount <= balance) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+    virtual double calculateInterest() = 0;
+    virtual void printStatement() = 0;
+    void getAccountInfo() {
+        cout << "Account Number: " << accountNumber << endl;
+        cout << "Account Holder: " << accountHolderName << endl;
+        cout << "Balance: " << balance << endl;
+    }
+};
+
+class SavingsAccount : public Account {
+private:
+    double interestRate;
+    double minimumBalance;
+public:
+    SavingsAccount(string accNum, string holderName, double bal, double rate, double minBal)
+        : Account(accNum, holderName, bal) {
+        interestRate = rate;
+        minimumBalance = minBal;
+    }
+
+    double calculateInterest() override {
+        return balance * interestRate / 100;
+    }
+
+    bool withdraw(double amount) override {
+        if (balance - amount >= minimumBalance) {
+            balance -= amount;
+            return true;
+        }
+        return false;
+    }
+
+    void printStatement() override {
+        cout << "[Savings Account Statement]" << endl;
+        getAccountInfo();
+        cout << "Interest Rate: " << interestRate << "%" << endl;
+        cout << "Minimum Balance: " << minimumBalance << endl;
+    }
+};
+
+class CheckingAccount : public Account {
+public:
+    CheckingAccount(string accNum, string holderName, double bal) : Account(accNum, holderName, bal) {}
+
+    double calculateInterest() override {
+        return 0.0;
+    }
+
+    void printStatement() override {
+        cout << "[Checking Account Statement]" << endl;
+        getAccountInfo();
+    }
+};
+
+class FixedDepositAccount : public Account {
+private:
+    double fixedInterestRate;
+    int maturityDate;
+public:
+    FixedDepositAccount(string accNum, string holderName, double bal, double rate, int maturity)
+        : Account(accNum, holderName, bal) {
+        fixedInterestRate = rate;
+        maturityDate = maturity;
+    }
+
+    double calculateInterest() override {
+        return balance * fixedInterestRate / 100;
+    }
+
+    void printStatement() override {
+        cout << "[Fixed Deposit Account Statement]" << endl;
+        getAccountInfo();
+        cout << "Fixed Interest Rate: " << fixedInterestRate << "%" << endl;
+        cout << "Maturity Date: " << maturityDate << endl;
+    }
+};
+
+int main() {
+    SavingsAccount sa("123", "Layqa", 5000.0, 4.5, 1000.0);
+    CheckingAccount ca("456", "Fatima", 3000.0);
+    FixedDepositAccount fda("789", "Shaukat", 10000.0, 5.0, 2025);
+
+    sa.printStatement();
+    cout << "Interest Earned: " << sa.calculateInterest() << endl;
+
+    ca.printStatement();
+    cout << "Interest Earned: " << ca.calculateInterest() << endl;
+
+    fda.printStatement();
+    cout << "Interest Earned: " << fda.calculateInterest() << endl;
+
+    return 0;
+}
