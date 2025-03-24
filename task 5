@@ -1,0 +1,96 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Media {
+protected:
+    string title;
+    string publicationDate;
+    int uniqueID;
+    string publisher;
+
+public:
+    Media(string t, string pDate, int uID, string pub)
+        : title(t), publicationDate(pDate), uniqueID(uID), publisher(pub) {}
+
+    virtual void displayInfo() {
+        cout << "Title: " << title << endl;
+        cout << "Publication Date: " << publicationDate << endl;
+        cout << "Unique ID: " << uniqueID << endl;
+        cout << "Publisher: " << publisher << endl;
+    }
+
+    virtual void checkOut() { cout << "Item checked out." << endl; }
+    virtual void returnItem() { cout << "Item returned." << endl; }
+};
+
+class Book : public Media {
+private:
+    string author;
+    string ISBN;
+    int numberOfPages;
+
+public:
+    Book(string t, string pDate, int uID, string pub, string a, string i, int n)
+        : Media(t, pDate, uID, pub), author(a), ISBN(i), numberOfPages(n) {}
+
+    void displayInfo() override {
+        Media::displayInfo();
+        cout << "Author: " << author << endl;
+        cout << "ISBN: " << ISBN << endl;
+        cout << "Number of Pages: " << numberOfPages << endl;
+    }
+};
+
+class DVD : public Media {
+private:
+    string director;
+    double duration;
+    string rating;
+
+public:
+    DVD(string t, string pDate, int uID, string pub, string d, double dur, string r)
+        : Media(t, pDate, uID, pub), director(d), duration(dur), rating(r) {}
+
+    void displayInfo() override {
+        Media::displayInfo();
+        cout << "Director: " << director << endl;
+        cout << "Duration: " << duration << " hours" << endl;
+        cout << "Rating: " << rating << endl;
+    }
+};
+
+class CD : public Media {
+private:
+    string artist;
+    int numberOfTracks;
+    string genre;
+
+public:
+    CD(string t, string pDate, int uID, string pub, string art, int tracks, string g)
+        : Media(t, pDate, uID, pub), artist(art), numberOfTracks(tracks), genre(g) {}
+
+    void displayInfo() override {
+        Media::displayInfo();
+        cout << "Artist: " << artist << endl;
+        cout << "Number of Tracks: " << numberOfTracks << endl;
+        cout << "Genre: " << genre << endl;
+    }
+};
+
+int main() {
+    Book b("C++ Programming", "2022", 101, "TechPress", "Bjarne Stroustrup", "978-1234567890", 500);
+    DVD d("Inception", "2010", 102, "Warner Bros.", "Christopher Nolan", 2.5, "PG-13");
+    CD c("Thriller", "1982", 103, "Epic Records", "Michael Jackson", 9, "Pop");
+
+    cout << "Book Details:\n";
+    b.displayInfo();
+
+    cout << "\nDVD Details:\n";
+    d.displayInfo();
+
+    cout << "\nCD Details:\n";
+    c.displayInfo();
+
+    return 0;
+}
