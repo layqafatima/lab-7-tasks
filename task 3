@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Currency {
+protected:
+    double amount;
+    string currencyCode;
+    string currencySymbol;
+    double exchangeRate;
+
+public:
+    Currency(double amt, string code, string symbol, double rate) {
+        amount = amt;
+        currencyCode = code;
+        currencySymbol = symbol;
+        exchangeRate = rate;
+    }
+
+    virtual double convertToBase() = 0;
+    virtual void displayCurrency() = 0;
+};
+
+class Dollar : public Currency {
+public:
+    Dollar(double amt) : Currency(amt, "USD", "$", 1.0) {}
+
+    double convertToBase() override {
+        return amount * exchangeRate;
+    }
+
+    void displayCurrency() override {
+        cout << amount << " (" << currencyCode << ")" << endl;
+    }
+};
+
+class Euro : public Currency {
+public:
+    Euro(double amt) : Currency(amt, "EUR", "€", 1.1) {}
+
+    double convertToBase() override {
+        return amount * exchangeRate;
+    }
+
+    void displayCurrency() override {
+        cout << amount << " (" << currencyCode << ")" << endl;
+    }
+};
+
+class Rupee : public Currency {
+public:
+    Rupee(double amt) : Currency(amt, "INR", "₹", 0.012) {}
+
+    double convertToBase() override {
+        return amount * exchangeRate;
+    }
+
+    void displayCurrency() override {
+        cout << amount << " (" << currencyCode << ")" << endl;
+    }
+};
+
+int main() {
+    Dollar d(100);
+    Euro e(85);
+    Rupee r(7500);
+
+    d.displayCurrency();
+    cout << "In base: " << d.convertToBase() << endl;
+
+    e.displayCurrency();
+    cout << "In base: " << e.convertToBase() << endl;
+
+    r.displayCurrency();
+    cout << "In base: " << r.convertToBase() << endl;
+
+    return 0;
+}
